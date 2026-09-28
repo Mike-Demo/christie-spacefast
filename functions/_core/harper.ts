@@ -169,16 +169,23 @@ export async function checkText(text: string, options: CheckTextOptions): Promis
       return grammarFailure("timeout", "The grammar check took too long and was cancelled.");
     }
     // SpaceFast preview: the edge runtime disallows WebAssembly compilation,
-    // so the Harper engine cannot run server-side. The browser editor at
-    // /editor runs Harper locally and is fully functional.
+    // so the Harper engine cannot run server-side. Fall back to the pure-JS
+    // checker (focused high-precision rules). The browser editor at /editor
+    // runs the full Harper engine locally.
     const msg = String(e ?? "");
     if (/disallowed by embedder|WebAssembly/i.test(msg)) {
-      return grammarFailure(
-        "unavailable",
-        "Server-side grammar checking is not available in the SpaceFast preview " +
-          "(the edge runtime blocks WebAssembly). Use the browser editor at /editor, " +
-          "which runs the Harper engine locally on your device.",
-      );
+      const { checkTextJs } = await import("./js-checker");
+      const jsLints = checkTextJs(text, options.maxChars);
+      // Convert JsRawLint[] to RawLint[] and normalize.
+      const rawLints: RawLint[] = jsLints.map((l) => ({
+        rule_id: l.rule_id,
+        kind: l.category,
+        message: l.message,
+        start: l.start,
+        end: l.end,
+        replacements: l.suggestions,
+      }));
+      return await normalizeLints(text, rawLints, resolved, Date.now() - startedAt);
     }
     return grammarFailure("internal", "The grammar engine could not complete this check.");
   } finally {
