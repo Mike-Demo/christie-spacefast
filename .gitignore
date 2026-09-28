@@ -36,3 +36,5 @@ src/.generated/
 
 # Lovable sandbox workspace directory
 .workspace/
+dist-spa/
+public/logo.png

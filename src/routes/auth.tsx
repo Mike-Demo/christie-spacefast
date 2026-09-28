@@ -12,6 +12,8 @@ import {
 } from "@/design-system/font-awsome-web-awesome-171158";
 import { lovable } from "@/integrations/lovable";
 import { supabase } from "@/integrations/supabase/client";
+// SpaceFast preview: Gravatar/WordPress.com OAuth is deferred.
+import { GRAVATAR_UNAVAILABLE_MESSAGE } from "@/spa/shims/gravatar";
 
 /** Only same-origin relative paths may be used as a post-sign-in destination. */
 function safeNext(value: unknown): string {
@@ -105,7 +107,12 @@ function AuthPage() {
       redirect_uri: `${window.location.origin}/auth/callback`,
     });
     if (result.error) {
-      setError("Google sign-in could not be started. Please try again.");
+      // SpaceFast preview: the Lovable shim returns a "not available" error.
+      setError(
+        result.error instanceof Error
+          ? result.error.message
+          : "Google sign-in could not be started. Please try again.",
+      );
       return;
     }
     if (result.redirected) return;
@@ -144,9 +151,9 @@ function AuthPage() {
             <WaButton
               appearance="outlined"
               disabled={busy}
-              onClick={() => {
-                window.location.href = `/api/public/gravatar/start?next=${encodeURIComponent(next)}`;
-              }}
+              // SpaceFast preview: Gravatar OAuth is deferred, so say so
+              // instead of navigating to a flow that cannot complete.
+              onClick={() => setError(GRAVATAR_UNAVAILABLE_MESSAGE)}
             >
               <WaIcon slot="start" name="circle-user" />
               Continue with Gravatar
