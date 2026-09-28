@@ -21,11 +21,12 @@ Isolated preview of CEO Owl (privacy-first English grammar checker) on SpaceFast
   - `rate_limits(user_id TEXT, window_start TEXT, count INT, updated_at TEXT, PK(user_id, window_start))`
 - **Auth**: preview-local email/password. PBKDF2-SHA256 password hashing, HMAC-signed
   HTTP-only session cookies. `SESSION_SECRET` env required. First registered user becomes admin.
-- **Harper in Functions**: Harper's 16MB WASM cannot be bundled. Load it at runtime via
-  `BinaryModule.create(url)` from `harper.js`, fetching the WASM from the published static
-  assets (the build copies `harper_wasm_bg.wasm` to dist). Cache the linter across requests.
-  The Function needs the WASM URL: derive from the request origin (`/assets/harper_wasm_bg.wasm`)
-  or a `WASM_BASE_URL` env var.
+- **Harper in Functions**: Harper's 16MB WASM cannot be bundled, and the SpaceFast
+  edge runtime blocks WebAssembly compilation (`CompileError: ... disallowed by
+  embedder`), so runtime-loaded WASM fails in Functions. `checkText` catches
+  this and falls back to a pure-JS checker (`functions/_core/js-checker.ts`)
+  covering repeated words, spacing, capitalization, a/an agreement, and common
+  misspellings. The browser editor at `/editor` runs the full Harper WASM locally.
 
 ## Public routes (SPA)
 - `/` — landing
