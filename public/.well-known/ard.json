@@ -1,0 +1,1 @@
+{"$schema":"https://agenticresourcediscovery.org/schema/ard.json","description":"Privacy-first English grammar checking: in-browser editor and MCP server, both powered by Harper.","name":"CEO Owl","resources":[{"description":"Model Context Protocol server for grammar checking","name":"CEO Owl MCP","type":"mcp-server","url":"https://ceoowl.com/mcp"}],"url":"https://ceoowl.com"}

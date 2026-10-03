@@ -1,0 +1,1 @@
+{"$schema":"https://schemas.agentskills.io/discovery/0.2.0/schema.json","skills":[{"description":"Check English grammar, spelling, and style with the Harper engine","digest":"sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","name":"Check Grammar","type":"skill-md","url":"https://ceoowl.com/"}]}

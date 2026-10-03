@@ -3,3 +3,4 @@ Allow: /
 Disallow: /health
 
 Sitemap: https://ceoowl.com/sitemap.xml
+schemamap: https://ceoowl.com/schemamap.xml

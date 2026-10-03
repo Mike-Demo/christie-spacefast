@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemaMap xmlns="https://nlweb.ai/schemamap">
+  <feed type="jsonld" url="https://ceoowl.com/#jsonld"/>
+  <feed type="rss" url="https://ceoowl.com/sitemap.xml"/>
+</schemaMap>
